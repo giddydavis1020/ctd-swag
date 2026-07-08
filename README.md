@@ -7,10 +7,10 @@ A simple React application that displays a list of tasks. Users view the todo it
 
 1. Clone the repository:
 ```bash 
-git clone <repository-url>
+git clone <https://github.com/giddydavis1020/ctd-swag>
 ```
 
-2. Navigate into the projeect folder:
+2. Navigate into the project folder:
 
 ```bash
 cd ctd-swag
