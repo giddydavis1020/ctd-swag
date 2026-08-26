@@ -21,11 +21,8 @@ function TodosPage({ token }) {
     };
 
     const invalidateCache = useCallback(() => {
-        console.log('Invalidating memo cache after todo mutation');
         setDataVersion(prev => prev + 1);
     }, []);
-
-
 
     useEffect(() => {
         async function fetchTodos() {
@@ -45,7 +42,6 @@ function TodosPage({ token }) {
 
                 const params = new URLSearchParams(paramsObject);
 
-
                 const response = await fetch(`/api/tasks?${params}`, {
                     headers: {
                         'X-CSRF-TOKEN': token,
@@ -62,15 +58,19 @@ function TodosPage({ token }) {
                 }
 
                 const data = await response.json();
+
                 setTodoList(data.tasks);
                 setFilterError('');
             } catch (error) {
-                if (
-                    debouncedFilterTerm ||
+                const isFilterOrSortRequest =
+                    debouncedFilterTerm !== '' ||
                     sortBy !== 'createdAt' ||
-                    sortDirection !== 'desc'
-                ) {
-                    setFilterError(`Error filtering/sorting todos: ${error.message}`);
+                    sortDirection !== 'desc';
+
+                if (isFilterOrSortRequest) {
+                    setFilterError(
+                        `Error filtering/sorting todos: ${error.message}`
+                    );
                 } else {
                     setError(`Error fetching todos: ${error.message}`);
                 }
@@ -78,8 +78,6 @@ function TodosPage({ token }) {
                 setIsTodoListLoading(false);
             }
         }
-            
-
 
         if (token) {
             fetchTodos();
@@ -176,7 +174,9 @@ function TodosPage({ token }) {
     }
 
     async function updateTodo(editedTodo) {
-        const originalTodo = todoList.find(todo => todo.id === editedTodo.id);
+        const originalTodo = todoList.find(
+            todo => todo.id === editedTodo.id
+        );
 
         if (!originalTodo) {
             return;
@@ -232,9 +232,11 @@ function TodosPage({ token }) {
             {filterError && (
                 <div>
                     <p>{filterError}</p>
+
                     <button onClick={() => setFilterError('')}>
                         Clear Filter Error
                     </button>
+
                     <button
                         onClick={() => {
                             setFilterTerm('');
@@ -246,7 +248,6 @@ function TodosPage({ token }) {
                         Reset Filters
                     </button>
                 </div>
-
             )}
 
             {isTodoListLoading && <p>Loading todos...</p>}
