@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import TodoList from './TodoList/TodoList.jsx';
 import TodoForm from './TodoForm.jsx';
 import SortBy from '../../shared/SortBy.jsx';
-import { useDebounce } from '../../utils/useDebounce.js';
+import useDebounce from '../../utils/useDebounce.js';
 import FilterInput from '../../shared/FilterInput.jsx';
 
 function TodosPage({ token }) {
