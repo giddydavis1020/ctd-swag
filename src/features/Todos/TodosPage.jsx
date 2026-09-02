@@ -4,13 +4,16 @@ import TodoForm from './TodoForm.jsx';
 import SortBy from '../../shared/SortBy.jsx';
 import useDebounce from '../../utils/useDebounce.js';
 import FilterInput from '../../shared/FilterInput.jsx';
+import { useAuth } from '../../contexts/AuthContext.jsx';
 import {
     todoReducer,
     initialTodoState,
     TODO_ACTIONS,
 } from '../../reducers/todoReducer';
 
-function TodosPage({ token }) {
+function TodosPage() {
+    const { token } = useAuth();
+
     const [state, dispatch] = useReducer(todoReducer, initialTodoState);
 
     const {
@@ -79,7 +82,7 @@ function TodosPage({ token }) {
                 const isFilterOrSortRequest =
                     debouncedFilterTerm !== '' ||
                     sortBy !== 'createdAt' ||
-                    sortDirection !== 'desc';
+                    sortDirection !== 'asc';
 
                 dispatch({
                     type: TODO_ACTIONS.FETCH_ERROR,
