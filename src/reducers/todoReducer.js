@@ -59,13 +59,16 @@ export function todoReducer(state, action) {
             };
 
         case TODO_ACTIONS.FETCH_ERROR:
-            return {
-                ...state,
-                isTodoListLoading: false,
-                ...(action.payload.isFilterError
-                    ? { filterError: action.payload.message }
-                    : { error: action.payload.message }),
-            };
+    return {
+        ...state,
+        isTodoListLoading: false,
+        error: action.payload.isFilterError
+            ? ''
+            : action.payload.message,
+        filterError: action.payload.isFilterError
+            ? action.payload.message
+            : '',
+    };
 
         // Add todo operations
         case TODO_ACTIONS.ADD_TODO_START:
