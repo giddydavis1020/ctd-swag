@@ -59,16 +59,16 @@ export function todoReducer(state, action) {
             };
 
         case TODO_ACTIONS.FETCH_ERROR:
-    return {
-        ...state,
-        isTodoListLoading: false,
-        error: action.payload.isFilterError
-            ? ''
-            : action.payload.message,
-        filterError: action.payload.isFilterError
-            ? action.payload.message
-            : '',
-    };
+            return {
+                ...state,
+                isTodoListLoading: false,
+                error: action.payload.isFilterError
+                    ? ''
+                    : action.payload.message,
+                filterError: action.payload.isFilterError
+                    ? action.payload.message
+                    : '',
+            };
 
         // Add todo operations
         case TODO_ACTIONS.ADD_TODO_START:
@@ -76,6 +76,7 @@ export function todoReducer(state, action) {
                 ...state,
                 todoList: [action.payload.todo, ...state.todoList],
                 error: '',
+                filterError: '',
             };
 
         case TODO_ACTIONS.ADD_TODO_SUCCESS:
@@ -96,6 +97,7 @@ export function todoReducer(state, action) {
                     todo => todo.id !== action.payload.tempId
                 ),
                 error: action.payload.message,
+                filterError: '',
             };
 
         // Complete todo operations
@@ -108,6 +110,7 @@ export function todoReducer(state, action) {
                         : todo
                 ),
                 error: '',
+                filterError: '',
             };
 
         case TODO_ACTIONS.COMPLETE_TODO_SUCCESS:
@@ -125,6 +128,7 @@ export function todoReducer(state, action) {
                         : todo
                 ),
                 error: action.payload.message,
+                filterError: '',
             };
 
         // Update todo operations
@@ -137,6 +141,7 @@ export function todoReducer(state, action) {
                         : todo
                 ),
                 error: '',
+                filterError: '',
             };
 
         case TODO_ACTIONS.UPDATE_TODO_SUCCESS:
@@ -154,14 +159,14 @@ export function todoReducer(state, action) {
                         : todo
                 ),
                 error: action.payload.message,
+                filterError: '',
             };
 
         // UI operations
         case TODO_ACTIONS.SET_SORT:
             return {
                 ...state,
-                sortBy: action.payload.sortBy,
-                sortDirection: action.payload.sortDirection,
+                ...action.payload,
             };
 
         case TODO_ACTIONS.SET_FILTER:

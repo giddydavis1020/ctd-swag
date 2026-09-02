@@ -60,6 +60,7 @@ export function AuthProvider({ children }) {
         if (!token) {
             setEmail('');
             setToken('');
+
             return { success: true };
         }
 
@@ -72,8 +73,18 @@ export function AuthProvider({ children }) {
                 credentials: 'include',
             });
 
+            let data = {};
+
+            try {
+                data = await response.json();
+            } catch {
+                // Response may not contain JSON.
+            }
+
             if (!response.ok) {
-                throw new Error('Failed to log out');
+                throw new Error(
+                    data?.message || 'Failed to log out'
+                );
             }
 
             setEmail('');
