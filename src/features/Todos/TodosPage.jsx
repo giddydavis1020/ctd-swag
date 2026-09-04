@@ -21,7 +21,6 @@ function TodosPage() {
     const debouncedFilterTerm = useDebounce(filterTerm, 300);
 
     const invalidateCache = useCallback(() => {
-        console.log('Invalidating memo cache after todo mutation');
         setDataVersion(version => version + 1);
     }, []);
 
@@ -75,7 +74,7 @@ function TodosPage() {
 
                 if (isFilterOrSortRequest) {
                     setFilterError(
-                        `Error fetching filtered todos: ${error.message}`
+                        `Error filtering/sorting todos: ${error.message}`
                     );
                 } else {
                     setError(`Error fetching todos: ${error.message}`);
