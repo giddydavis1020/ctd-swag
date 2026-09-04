@@ -82,7 +82,7 @@ function TodosPage() {
                 const isFilterOrSortRequest =
                     debouncedFilterTerm !== '' ||
                     sortBy !== 'createdAt' ||
-                    sortDirection !== 'asc';
+                    sortDirection !== 'desc';
 
                 dispatch({
                     type: TODO_ACTIONS.FETCH_ERROR,
@@ -97,7 +97,7 @@ function TodosPage() {
         if (token) {
             fetchTodos();
         }
-    }, [token, sortBy, sortDirection, debouncedFilterTerm]);
+    }, [token, sortBy, sortDirection, debouncedFilterTerm, dataVersion]);
 
     async function addTodo(todoTitle) {
         const newTodo = {
@@ -293,25 +293,27 @@ function TodosPage() {
             {isTodoListLoading && <p>Loading todos...</p>}
 
             <SortBy
-    sortBy={sortBy}
-    sortDirection={sortDirection}
-    onSortByChange={newSortBy =>
-        dispatch({
-            type: TODO_ACTIONS.SET_SORT,
-            payload: {
-                sortBy: newSortBy,
-            },
-        })
-    }
-    onSortDirectionChange={newSortDirection =>
-        dispatch({
-            type: TODO_ACTIONS.SET_SORT,
-            payload: {
-                sortDirection: newSortDirection,
-            },
-        })
-    }
-/>
+                sortBy={sortBy}
+                sortDirection={sortDirection}
+                onSortByChange={newSortBy =>
+                    dispatch({
+                        type: TODO_ACTIONS.SET_SORT,
+                        payload: {
+                            sortBy: newSortBy,
+                            sortDirection: sortDirection,
+                        },
+                    })
+                }
+                onSortDirectionChange={newSortDirection =>
+                    dispatch({
+                        type: TODO_ACTIONS.SET_SORT,
+                        payload: {
+                            sortBy: sortBy,
+                            sortDirection: newSortDirection,
+                        },
+                    })
+                }
+            />
 
             <FilterInput
                 filterTerm={filterTerm}
