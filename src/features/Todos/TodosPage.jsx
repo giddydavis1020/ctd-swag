@@ -82,7 +82,7 @@ function TodosPage() {
                 const isFilterOrSortRequest =
                     debouncedFilterTerm !== '' ||
                     sortBy !== 'createdAt' ||
-                    sortDirection !== 'desc';
+                    sortDirection !== 'asc';
 
                 dispatch({
                     type: TODO_ACTIONS.FETCH_ERROR,
