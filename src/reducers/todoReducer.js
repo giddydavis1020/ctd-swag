@@ -22,6 +22,7 @@ export const TODO_ACTIONS = {
     // UI operations
     SET_SORT: 'SET_SORT',
     SET_FILTER: 'SET_FILTER',
+    SET_DATA_VERSION: 'SET_DATA_VERSION',
     CLEAR_ERROR: 'CLEAR_ERROR',
     CLEAR_FILTER_ERROR: 'CLEAR_FILTER_ERROR',
     RESET_FILTERS: 'RESET_FILTERS',
@@ -33,7 +34,7 @@ export const initialTodoState = {
     filterError: '',
     isTodoListLoading: true,
     sortBy: 'createdAt',
-    sortDirection: 'asc',
+    sortDirection: 'desc',
     filterTerm: '',
     dataVersion: 0,
 };
@@ -89,7 +90,6 @@ export function todoReducer(state, action) {
                         : todo
                 ),
                 isTodoListLoading: false,
-                dataVersion: state.dataVersion + 1,
             };
 
         case TODO_ACTIONS.ADD_TODO_ERROR:
@@ -121,7 +121,6 @@ export function todoReducer(state, action) {
             return {
                 ...state,
                 isTodoListLoading: false,
-                dataVersion: state.dataVersion + 1,
             };
 
         case TODO_ACTIONS.COMPLETE_TODO_ERROR:
@@ -155,7 +154,6 @@ export function todoReducer(state, action) {
             return {
                 ...state,
                 isTodoListLoading: false,
-                dataVersion: state.dataVersion + 1,
             };
 
         case TODO_ACTIONS.UPDATE_TODO_ERROR:
@@ -184,6 +182,12 @@ export function todoReducer(state, action) {
                 filterTerm: action.payload,
             };
 
+        case TODO_ACTIONS.SET_DATA_VERSION:
+            return {
+                ...state,
+                dataVersion: state.dataVersion + 1,
+            };
+
         case TODO_ACTIONS.CLEAR_ERROR:
             return {
                 ...state,
@@ -201,9 +205,8 @@ export function todoReducer(state, action) {
                 ...state,
                 filterTerm: '',
                 sortBy: 'createdAt',
-                sortDirection: 'asc',
+                sortDirection: 'desc',
                 filterError: '',
-                dataVersion: 0,
             };
 
         default:

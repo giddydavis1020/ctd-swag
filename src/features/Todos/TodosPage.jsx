@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from 'react';
+import { useCallback, useEffect, useReducer } from 'react';
 import TodoList from './TodoList/TodoList.jsx';
 import TodoForm from './TodoForm.jsx';
 import SortBy from '../../shared/SortBy.jsx';
@@ -28,6 +28,13 @@ function TodosPage() {
     } = state;
 
     const debouncedFilterTerm = useDebounce(filterTerm, 300);
+
+    const invalidateCache = useCallback(() => {
+        console.log('Cache invalidated');
+        dispatch({
+            type: TODO_ACTIONS.SET_DATA_VERSION,
+        });
+    }, []);
 
     const handleFilterChange = (newTerm) => {
         dispatch({
@@ -82,12 +89,14 @@ function TodosPage() {
                 const isFilterOrSortRequest =
                     debouncedFilterTerm !== '' ||
                     sortBy !== 'createdAt' ||
-                    sortDirection !== 'asc';
+                    sortDirection !== 'desc';
 
                 dispatch({
                     type: TODO_ACTIONS.FETCH_ERROR,
                     payload: {
-                        message: `Error fetching todos: ${error.message}`,
+                        message: isFilterOrSortRequest
+                            ? `Error fetching filtered todos: ${error.message}`
+                            : `Error fetching todos: ${error.message}`,
                         isFilterError: isFilterOrSortRequest,
                     },
                 });
@@ -140,6 +149,8 @@ function TodosPage() {
                     todo: data,
                 },
             });
+
+            invalidateCache();
         } catch (error) {
             dispatch({
                 type: TODO_ACTIONS.ADD_TODO_ERROR,
@@ -185,6 +196,8 @@ function TodosPage() {
             dispatch({
                 type: TODO_ACTIONS.COMPLETE_TODO_SUCCESS,
             });
+
+            invalidateCache();
         } catch (error) {
             dispatch({
                 type: TODO_ACTIONS.COMPLETE_TODO_ERROR,
@@ -234,6 +247,8 @@ function TodosPage() {
             dispatch({
                 type: TODO_ACTIONS.UPDATE_TODO_SUCCESS,
             });
+
+            invalidateCache();
         } catch (error) {
             dispatch({
                 type: TODO_ACTIONS.UPDATE_TODO_ERROR,
