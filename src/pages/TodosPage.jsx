@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useReducer } from 'react';
 import TodoList from '../features/Todos/TodoList/TodoList.jsx';
 import TodoForm from '../features/Todos/TodoForm.jsx';
 import SortBy from '../shared/SortBy.jsx';
@@ -19,7 +20,6 @@ function TodosPage() {
     const statusFilter = searchParams.get('status') || 'all';
 
     const [state, dispatch] = useReducer(todoReducer, initialTodoState);
-
 
     const {
         todoList,
@@ -82,7 +82,7 @@ function TodosPage() {
                 dispatch({
                     type: TODO_ACTIONS.FETCH_SUCCESS,
                     payload: {
-                        todos: data.tasks,
+                        todos: data.tasks || data,
                     },
                 });
             } catch (error) {
@@ -104,7 +104,13 @@ function TodosPage() {
         if (token) {
             fetchTodos();
         }
-    }, [token, sortBy, sortDirection, debouncedFilterTerm, dataVersion]);
+    }, [
+        token,
+        sortBy,
+        sortDirection,
+        debouncedFilterTerm,
+        dataVersion,
+    ]);
 
     async function addTodo(todoTitle) {
         const newTodo = {

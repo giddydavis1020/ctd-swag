@@ -12,11 +12,18 @@ function LoginPage() {
     const [authError, setAuthError] = useState('');
     const [isLoggingOn, setIsLoggingOn] = useState(false);
 
-    const from = location.state?.from?.pathname || '/todos';
+    const from = location.state?.from || {
+        pathname: '/todos',
+        search: '',
+        hash: '',
+    };
 
     useEffect(() => {
         if (isAuthenticated) {
-            navigate(from, { replace: true });
+            navigate(
+                `${from.pathname}${from.search || ''}${from.hash || ''}`,
+                { replace: true }
+            );
         }
     }, [isAuthenticated, navigate, from]);
 
@@ -29,9 +36,8 @@ function LoginPage() {
 
         if (!result.success) {
             setAuthError(result.error);
+            setIsLoggingOn(false);
         }
-
-        setIsLoggingOn(false);
     }
 
     return (

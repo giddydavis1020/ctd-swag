@@ -10,7 +10,13 @@ function RequireAuth({ children }) {
     useEffect(() => {
         if (!isAuthenticated) {
             navigate('/login', {
-                state: { from: location },
+                state: {
+                    from: {
+                        pathname: location.pathname,
+                        search: location.search,
+                        hash: location.hash,
+                    },
+                },
                 replace: true,
             });
         }

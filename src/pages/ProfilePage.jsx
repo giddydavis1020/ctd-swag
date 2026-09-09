@@ -20,15 +20,13 @@ function ProfilePage() {
                 setLoading(true);
                 setError('');
 
-                const options = {
+                const response = await fetch('/api/tasks?limit=100', {
                     method: 'GET',
                     headers: {
                         'X-CSRF-TOKEN': token,
                     },
                     credentials: 'include',
-                };
-
-                const response = await fetch('/api/tasks', options);
+                });
 
                 if (response.status === 401) {
                     throw new Error('Unauthorized');
@@ -39,7 +37,12 @@ function ProfilePage() {
                 }
 
                 const data = await response.json();
-                const todos = data.tasks || [];
+
+                const todos = Array.isArray(data)
+                    ? data
+                    : Array.isArray(data.tasks)
+                      ? data.tasks
+                      : [];
 
                 const total = todos.length;
                 const completed = todos.filter(
@@ -64,7 +67,9 @@ function ProfilePage() {
 
     const completionPercentage =
         todoStats.total > 0
-            ? Math.round((todoStats.completed / todoStats.total) * 100)
+            ? Math.round(
+                  (todoStats.completed / todoStats.total) * 100
+              )
             : 0;
 
     return (
